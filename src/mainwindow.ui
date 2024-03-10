@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>725</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>725</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuSwitch_GPT">
+    <property name="title">
+     <string>Switch GPT</string>
+    </property>
+    <addaction name="actChatGPT"/>
+    <addaction name="actYiyan"/>
+    <addaction name="actTongyi"/>
+    <addaction name="actDoubao"/>
+   </widget>
+   <addaction name="menuSwitch_GPT"/>
+  </widget>
+  <action name="actChatGPT">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/assets/ChatGPT.svg</normaloff>:/assets/ChatGPT.svg</iconset>
+   </property>
+   <property name="text">
+    <string>ChatGPT</string>
+   </property>
+  </action>
+  <action name="actYiyan">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/assets/yiyan.png</normaloff>:/assets/yiyan.png</iconset>
+   </property>
+   <property name="text">
+    <string>文心一言</string>
+   </property>
+   <property name="iconText">
+    <string>文心一言</string>
+   </property>
+  </action>
+  <action name="actTongyi">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/assets/tongyi.png</normaloff>:/assets/tongyi.png</iconset>
+   </property>
+   <property name="text">
+    <string>通义千问</string>
+   </property>
+  </action>
+  <action name="actDoubao">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/assets/doubao.png</normaloff>:/assets/doubao.png</iconset>
+   </property>
+   <property name="text">
+    <string>字节豆包</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
