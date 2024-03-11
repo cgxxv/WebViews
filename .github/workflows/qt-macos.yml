@@ -15,7 +15,7 @@ jobs:
         arch: [arm64, x86_64]
         qt:
           - version: 6.5.3
-            modules: qtwebengine qtwebchannel
+            modules: qtwebengine qtwebchannel qtpositioning
     steps:
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
