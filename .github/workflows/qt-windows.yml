@@ -18,32 +18,61 @@ jobs:
         qt:
           - version: 6.5.3
             modules: qtwebengine qtwebchannel qtpositioning
+        include:
+          - { sys: mingw64, env: x86_64 }
+          - { sys: mingw32, env: i686 }
+          - { sys: ucrt64,  env: ucrt-x86_64 }  # Experimental!
+          - { sys: clang64, env: clang-x86_64 } # Experimental!
+    defaults:
+      run:
+        shell: msys2 {0}
     steps:
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: ${{matrix.sys}}
+          update: true
+          install: >-
+            git
+            make
+          pacboy: >-
+            toolchain:p
+            cmake:p
+            ninja:p
+
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
           version: ${{ matrix.qt.version }}
           modules: ${{ matrix.qt.modules }}
           # arch: ${{ matrix.qt_arch }}
+
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
-      - name: Set up Qt environment
-        shell: powershell
+
+
+      - name: where is cmake, make, ninja
         run: |
-          $QtVersion = "${{ matrix.qt.version }}"
-          $QtBaseDir = "${{ github.workspace }}\..\Qt\$QtVersion"
-          $QtArch = Get-ChildItem -Path $QtBaseDir -Directory | Where-Object { $_.Name -like 'msvc*' } | Select-Object -ExpandProperty Name
-          $QtInstallDir = "${{ github.workspace }}\..\Qt\$QtVersion\$QtArch\lib\cmake"
+          which cmake
+          which make
+          which ninja
+          env
 
-          # $QtInstallDir = (Get-ChildItem -Path "${{ github.workspace }}\..\Qt\$QtVersion\" | Where-Object { $_.PSIsContainer -and $_.Name -match 'msvc.*' } | Select-Object -ExpandProperty FullName) + '\lib\cmake'
-          $CMakeBuildType = "Release"
+      - name: Set up Qt environment
+        run: |
+          QtVersion="${{ matrix.qt.version }}"
+          QtBaseDir="${{ github.workspace }}/../Qt/${QtVersion}"
+          ls -al "${QtBaseDir}"
+          QtArch=$(ls "${QtBaseDir}" | grep 'msvc*' | head -n 1)
+          QtInstallDir="${{ github.workspace }}/../../Qt/${QtVersion}/${QtArch}/lib/cmake"
+          ls -al ${QtInstallDir}
+          export TEMP_QT_ARCH=${QtArch}
 
-          Write-Output "QT_VERSION=$QtVersion" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          Write-Output "CMAKE_PREFIX_PATH=$QtInstallDir" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          Write-Output "CMAKE_BUILD_TYPE=$CMakeBuildType" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-      - name: Build Msvc
-        shell: powershell
+      - name: Build Windows
+        env:
+          QT_VERSION: ${{ matrix.qt.version }}
+          CMAKE_PREFIX_PATH: ${{ github.workspace }}/../Qt/${{ matrix.qt.version }}/${{ env.TEMP_QT_ARCH }}/lib/cmake
+          CMAKE_BUILD_TYPE: Release
         run: |
           # Get-ChildItem -Path "${{ github.workspace }}\.."
           # Get-ChildItem -Path "$QtBaseDir"
@@ -51,24 +80,24 @@ jobs:
           # Get-ChildItem
           mkdir build
           cd build
-          cmake ..
-          Get-ChildItem
+          cmake -G Ninja ..
+          ls -al
           cmake --build .
-          Get-ChildItem
+          ls -al
           make
           cd ..
-          Get-ChildItem build
+          ls -al build
 
       - name: Package Application
         run: |
           cd build
-          $os = ${{ matrix.os }} -replace "-latest", ""
-          $repositoryName = ${{ github.repository }} -replace ".*/", ""
-          $zipfile = ${repositoryName}-${os}-${{ matrix.arch }}-${{ github.run_number }}.zip
-          Compress-Archive -Path ${repositoryName}.exe -DestinationPath ${zipfile}
-          Move-Item ${zipfile} ..
+          os=$(echo "${{ matrix.os }}" | sed 's/-latest//')
+          repository_name=$(basename ${{ github.repository }})
+          zipfile=${repository_name}-${os}-${{ matrix.arch }}-${{ github.run_number }}.zip
+          zip -r ${zipfile} ${repository_name}.exe
+          mv ${zipfile} ..
           cd ..
-          Get-ChildItem
+          ls -al
           echo "${zipfile}" > assets.txt
 
       - name: Create a Release
