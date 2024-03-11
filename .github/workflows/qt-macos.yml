@@ -32,7 +32,7 @@ jobs:
       - name: Build MacOS
         env:
           QT_VERSION: ${{ matrix.qt.version }}
-          CMAKE_PREFIX_PATH: ${{ github.workspace }}/../Qt/${{ matrix.qt.version }}/macos/lib/cmake
+          CMAKE_PREFIX_PATH: ${{ env.Qt6_DIR }}/lib/cmake
           CMAKE_BUILD_TYPE: Release
         run: |
           # ls -al ${{ github.workspace }}/..

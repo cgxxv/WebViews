@@ -58,26 +58,22 @@ jobs:
           which ninja
           env
 
-      - name: Set up Qt environment
+      - name: Test environment
         run: |
           QtVersion="${{ matrix.qt.version }}"
           QtBaseDir="${{ github.workspace }}/../Qt/${QtVersion}"
           ls -al "${QtBaseDir}"
-          QtArch=$(ls "${QtBaseDir}" | grep 'msvc*' | head -n 1)
-          QtInstallDir="${{ github.workspace }}/../../Qt/${QtVersion}/${QtArch}/lib/cmake"
-          ls -al ${QtInstallDir}
-          export TEMP_QT_ARCH=${QtArch}
+          # QtArch=$(ls "${QtBaseDir}" | grep 'msvc*' | head -n 1)
+          # QtInstallDir="${{ env.Qt6_DIR }}/lib/cmake"
+          ls -al "${{ env.Qt6_DIR }}/lib/cmake"
+          # export TEMP_QT_ARCH=${QtArch}
 
       - name: Build Windows
         env:
           QT_VERSION: ${{ matrix.qt.version }}
-          CMAKE_PREFIX_PATH: ${{ github.workspace }}/../Qt/${{ matrix.qt.version }}/${{ env.TEMP_QT_ARCH }}/lib/cmake
+          CMAKE_PREFIX_PATH: ${{ env.Qt6_DIR }}/lib/cmake
           CMAKE_BUILD_TYPE: Release
         run: |
-          # Get-ChildItem -Path "${{ github.workspace }}\.."
-          # Get-ChildItem -Path "$QtBaseDir"
-          # Get-ChildItem -Path "$QtInstallDir"
-          # Get-ChildItem
           mkdir build
           cd build
           cmake -G Ninja ..
