@@ -50,28 +50,10 @@ jobs:
         with:
           fetch-depth: 1
 
-
-      - name: where is cmake, make, ninja
-        run: |
-          which cmake
-          which make
-          which ninja
-          env
-
-      - name: Test environment
-        run: |
-          QtVersion="${{ matrix.qt.version }}"
-          QtBaseDir="${{ github.workspace }}/../Qt/${QtVersion}"
-          ls -al "${QtBaseDir}"
-          # QtArch=$(ls "${QtBaseDir}" | grep 'msvc*' | head -n 1)
-          # QtInstallDir="${{ env.Qt6_DIR }}/lib/cmake"
-          ls -al "${{ env.Qt6_DIR }}/lib/cmake"
-          # export TEMP_QT_ARCH=${QtArch}
-
       - name: Build Windows
         env:
           QT_VERSION: ${{ matrix.qt.version }}
-          CMAKE_PREFIX_PATH: ${{ env.Qt6_DIR }}/lib/cmake
+          CMAKE_PREFIX_PATH: ${{ env.Qt6_DIR }}\lib\cmake
           CMAKE_BUILD_TYPE: Release
         run: |
           mkdir build
