@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>ChatGPTs</string>
   </property>
   <widget class="QWidget" name="centralwidget"/>
   <widget class="QMenuBar" name="menubar">
@@ -36,7 +36,7 @@
   </widget>
   <action name="actChatGPT">
    <property name="icon">
-    <iconset>
+    <iconset resource="../resource.qrc">
      <normaloff>:/assets/ChatGPT.svg</normaloff>:/assets/ChatGPT.svg</iconset>
    </property>
    <property name="text">
@@ -45,7 +45,7 @@
   </action>
   <action name="actYiyan">
    <property name="icon">
-    <iconset>
+    <iconset resource="../resource.qrc">
      <normaloff>:/assets/yiyan.png</normaloff>:/assets/yiyan.png</iconset>
    </property>
    <property name="text">
@@ -57,7 +57,7 @@
   </action>
   <action name="actTongyi">
    <property name="icon">
-    <iconset>
+    <iconset resource="../resource.qrc">
      <normaloff>:/assets/tongyi.png</normaloff>:/assets/tongyi.png</iconset>
    </property>
    <property name="text">
@@ -66,7 +66,7 @@
   </action>
   <action name="actDoubao">
    <property name="icon">
-    <iconset>
+    <iconset resource="../resource.qrc">
      <normaloff>:/assets/doubao.png</normaloff>:/assets/doubao.png</iconset>
    </property>
    <property name="text">
@@ -74,6 +74,8 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resource.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -1,0 +1,53 @@
+name: Windows
+on:
+  push:
+    paths-ignore:
+      - "README.md"
+      - "LICENSE"
+  pull_request:
+    paths-ignore:
+      - "README.md"
+      - "LICENSE"
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        qt:
+          - version: 6.5.3
+            modules: qtwebengine qtwebchannel
+    steps:
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ matrix.qt.version }}
+          modules: ${{ matrix.qt.modules }}
+          # arch: ${{ matrix.qt_arch }}
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Set up Qt environment
+        shell: powershell
+        run: |
+          $QtVersion = "${{ matrix.qt.version }}"
+          $QtBaseDir = "${{ github.workspace }}\..\Qt\$QtVersion"
+          $QtArch = Get-ChildItem -Path $QtBaseDir -Directory | Where-Object { $_.Name -like 'msvc*' } | Select-Object -ExpandProperty Name
+          $QtInstallDir = "${{ github.workspace }}\..\Qt\$QtVersion\$QtArch\lib\cmake"
+
+          # $QtInstallDir = (Get-ChildItem -Path "${{ github.workspace }}\..\Qt\$QtVersion\" | Where-Object { $_.PSIsContainer -and $_.Name -match 'msvc.*' } | Select-Object -ExpandProperty FullName) + '\lib\cmake'
+          $CMakeBuildType = "Release"
+
+          Write-Output "QT_VERSION=$QtVersion" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Output "CMAKE_PREFIX_PATH=$QtInstallDir" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Output "CMAKE_BUILD_TYPE=$CMakeBuildType" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      - name: build-msvc
+        shell: powershell
+        run: |
+          Get-ChildItem -Path "${{ github.workspace }}\.."
+          Get-ChildItem -Path "$QtBaseDir"
+          Get-ChildItem -Path "$QtInstallDir"
+          Get-ChildItem
+          mkdir build
+          cd build
+          cmake ..
+          make

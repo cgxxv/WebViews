@@ -1,0 +1,43 @@
+name: MacOS
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest]
+        arch: [arm64, x86_64]
+        qt:
+          - version: 6.5.3
+            modules: qtwebengine qtwebchannel
+    steps:
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ matrix.qt.version }}
+          modules: ${{ matrix.qt.modules }}
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: build macos
+        env:
+          QT_VERSION: ${{ matrix.qt.version }}
+          CMAKE_PREFIX_PATH: ${{ github.workspace }}/../Qt/${{ matrix.qt.version }}/macos/lib/cmake
+          CMAKE_BUILD_TYPE: Release
+        run: |
+          ls -al ${{ github.workspace }}/..
+          ls -al ${{ github.workspace }}/../Qt/${{ matrix.qt.version }}
+          ls -al ${{ github.workspace }}/../Qt/${{ matrix.qt.version }}/macos
+          ls -al ${{ github.workspace }}/../Qt/${{ matrix.qt.version }}/macos/lib
+          ls -al ${{ github.workspace }}/../Qt/${{ matrix.qt.version }}/macos/lib/cmake
+          ls -al
+          mkdir -p build/${{ matrix.arch }}
+          cd build/${{ matrix.arch }}
+          cmake ../..
+          make

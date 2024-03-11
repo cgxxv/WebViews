@@ -1,0 +1,63 @@
+name: Android
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    name: Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        qt:
+          - version: 6.5.3
+            modules: qtwebengine
+            target: android
+        # android_arm64_v8a 暂时不支持. install-qt-action 依赖的aqtinstall版本为0.5*,需要升级
+        # qt_arch: [android_x86,android_armv7,android_arm64_v8a]
+        # qt_arch: [android_x86, android_armv7]
+        # exclude:
+        #   - qt_ver: 5.9.8
+        #     qt_arch: android_arm64_v8a
+    steps:
+      - name: Install Qt
+        # if: steps.cacheqt.outputs.cache-hit != 'true'
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ matrix.qt.version }}
+          modules: ${{ matrix.qt.modules }}
+          target: ${{ matrix.qt.target }}
+          # arch: ${{ matrix.qt_arch }}
+      - name: Install Android NDK
+        shell: bash
+        # Links to NDK are at https://github.com/android/ndk/wiki/Unsupported-Downloads
+        run: |
+          if [[ "${RUNNER_OS}" == "Linux" ]]; then
+            export TARGET_ARCH="linux"
+          elif [[ "${RUNNER_OS}" == "Windows" ]]; then
+            export TARGET_ARCH="windows"
+          else
+            export TARGET_ARCH="darwin"
+          fi
+          export NDK_VER_NUM=$(echo ${{ matrix.qt.ndk-version }} | sed -e 's/r(\d+).*/$1/g')
+          # If it's less than 23, append -x86_64
+          if (( "${NDK_VER_NUM}" < 23 )); then
+            export TARGET_ARCH="${TARGET_ARCH}-x86_64"
+          fi;
+          curl -O "https://dl.google.com/android/repository/android-ndk-${{ matrix.qt.ndk-version }}-${TARGET_ARCH}.zip"
+          unzip "android-ndk-${{ matrix.qt.ndk-version }}-${TARGET_ARCH}.zip"
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: build android
+        env:
+          QT_VERSION: ${{ matrix.qt.version }}
+        run: |
+          export ANDROID_SDK_ROOT=$ANDROID_HOME
+          export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk-bundle
+          cmake -DCMAKE_BUILD_TYPE=Release
+          make

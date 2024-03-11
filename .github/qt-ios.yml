@@ -1,0 +1,38 @@
+#ios.yml
+name: IOS
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    name: Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest]
+        qt:
+          - version: 6.5.3
+            modules: qtwebengine
+            target: ios
+    steps:
+      - name: Install Qt
+        # if: steps.cacheqt.outputs.cache-hit != 'true'
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ matrix.qt.version }}
+          modules: ${{ matrix.qt.modules }}
+          target: ${{ matrix.qt.target }}
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: build ios
+        env:
+          QT_VERSION: ${{ matrix.qt.version }}
+        run: |
+          # qmake -r -spec macx-ios-clang CONFIG+=release CONFIG+=iphoneos
+          cmake -DCMAKE_BUILD_TYPE=Release
+          make

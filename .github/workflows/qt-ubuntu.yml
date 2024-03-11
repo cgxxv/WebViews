@@ -1,0 +1,44 @@
+name: Ubuntu
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        qt:
+          - version: 6.5.3
+            modules: qtwebengine qtwebchannel
+    steps:
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ matrix.qt.version }}
+          modules: ${{ matrix.qt.modules }}
+      - name: ubuntu install GL library
+        run: sudo apt-get install -y libglew-dev libglfw3-dev
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: build ubuntu
+        env:
+          QT_VERSION: ${{ matrix.qt.version }}
+          CMAKE_PREFIX_PATH: ${{ github.workspace }}/../Qt/${{ matrix.qt.version }}/gcc_64/lib/cmake
+          CMAKE_BUILD_TYPE: Release
+        run: |
+          ls -al ${{ github.workspace }}/..
+          ls -al ${{ github.workspace }}/../Qt/${{ matrix.qt.version }}
+          ls -al ${{ github.workspace }}/../Qt/${{ matrix.qt.version }}/gcc_64
+          ls -al ${{ github.workspace }}/../Qt/${{ matrix.qt.version }}/gcc_64/lib
+          ls -al ${{ github.workspace }}/../Qt/${{ matrix.qt.version }}/gcc_64/lib/cmake
+          ls -al
+          mkdir build
+          cd build
+          cmake ..
+          make
