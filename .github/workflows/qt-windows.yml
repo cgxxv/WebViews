@@ -1,13 +1,15 @@
 name: Windows
 on:
   push:
-    paths-ignore:
-      - "README.md"
-      - "LICENSE"
+    branches:
+      - main
+    tags:
+      - "v*"
   pull_request:
-    paths-ignore:
-      - "README.md"
-      - "LICENSE"
+    branches:
+      - main
+  release:
+      types: [published]
 jobs:
   build:
     runs-on: windows-latest
@@ -40,14 +42,44 @@ jobs:
           Write-Output "QT_VERSION=$QtVersion" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           Write-Output "CMAKE_PREFIX_PATH=$QtInstallDir" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           Write-Output "CMAKE_BUILD_TYPE=$CMakeBuildType" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-      - name: build-msvc
+      - name: Build Msvc
         shell: powershell
         run: |
-          Get-ChildItem -Path "${{ github.workspace }}\.."
-          Get-ChildItem -Path "$QtBaseDir"
-          Get-ChildItem -Path "$QtInstallDir"
-          Get-ChildItem
+          # Get-ChildItem -Path "${{ github.workspace }}\.."
+          # Get-ChildItem -Path "$QtBaseDir"
+          # Get-ChildItem -Path "$QtInstallDir"
+          # Get-ChildItem
           mkdir build
           cd build
           cmake ..
+          Get-ChildItem
+          cmake --build .
+          Get-ChildItem
           make
+          cd ..
+          Get-ChildItem build
+
+      - name: Package Application
+        run: |
+          cd build
+          $os = ${{ matrix.os }} -replace "-latest", ""
+          $repositoryName = ${{ github.repository }} -replace ".*/", ""
+          $zipfile = ${repositoryName}-${os}-${{ matrix.arch }}-${{ github.run_number }}.zip
+          Compress-Archive -Path ${repositoryName}.exe -DestinationPath ${zipfile}
+          Move-Item ${zipfile} ..
+          cd ..
+          Get-ChildItem
+          echo "${zipfile}" > assets.txt
+
+      - name: Create a Release
+        if: ${{ github.event_name == 'release' }}
+        id: create_release
+        uses: shogo82148/actions-create-release@v1
+
+      - name: Upload Assets
+        if: ${{ github.event_name == 'release' }}
+        uses: shogo82148/actions-upload-release-asset@v1
+        with:
+          github_token: ${{ secrets.GH_RELEASE_ACTION_TOKEN }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: assets.txt
