@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "util.h"
 
 #include <QApplication>
 #include <QIcon>
@@ -9,8 +8,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    const QPixmap rounded = Gpt::Util::get_rounded_pixmap(":/assets/ChatGPT.svg");
-    a.setWindowIcon(QIcon(rounded));
+    a.setWindowIcon(QIcon(":/assets/ChatGPTs.svg"));
 
     MainWindow w;
     w.resize(1024,768);

@@ -13,6 +13,7 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets WebEngineWidgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets WebEngineWidgets)
 
 set(PROJECT_SOURCES
+        ChatGPTs.icns
         src/main.cpp
         src/mainwindow.h src/mainwindow.cpp
         resource.qrc
@@ -46,19 +47,17 @@ endif()
 
 target_link_libraries(ChatGPTs PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::WebEngineWidgets)
 
-# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
-# If you are developing for iOS or macOS you should consider setting an
-# explicit, fixed bundle identifier manually though.
-if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.ChatGPTs)
-endif()
 set_target_properties(ChatGPTs PROPERTIES
-    ${BUNDLE_ID_OPTION}
+    MACOSX_BUNDLE_GUI_IDENTIFIER com.github.cgxxv.ChatGPTs
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+    MACOSX_BUNDLE_BUNDLE_IDENTIFIER com.cgxxv.ChatGPTs
+    MACOSX_BUNDLE_ICON_FILE ChatGPTs.icns
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
+set_source_files_properties(ChatGPTs.icns PROPERTIES
+           MACOSX_PACKAGE_LOCATION "Resources")
 
 include(GNUInstallDirs)
 install(TARGETS ChatGPTs
