@@ -11,7 +11,7 @@ class Util
 public:
     explicit Util() {};
 
-    static QPixmap get_rounded_pixmap(QString str);
+    static QPixmap getRoundedPixmap(QString str);
 };
 
 }

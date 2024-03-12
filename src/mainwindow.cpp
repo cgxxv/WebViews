@@ -2,9 +2,13 @@
 #include "./ui_mainwindow.h"
 #include "webengineview.h"
 #include "util.h"
+#include "cookiemanager.h"
 
 #include <QUrl>
 #include <QIcon>
+#include <QWebEngineCookieStore>
+#include <QWebEngineProfile>
+#include <QDir>
 
 #define CHATGPT_URL "https://chat.openai.com"
 #define YIYAN_URL "https://yiyan.baidu.com"
@@ -18,12 +22,15 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    ui->actChatGPT->setIcon(QIcon(Gpt::Util::get_rounded_pixmap(":/assets/ChatGPT.svg")));
-    ui->actDoubao->setIcon(QIcon(Gpt::Util::get_rounded_pixmap(":/assets/doubao.png")));
-    ui->actYiyan->setIcon(QIcon(Gpt::Util::get_rounded_pixmap(":/assets/yiyan.png")));
-    ui->actTongyi->setIcon(QIcon(Gpt::Util::get_rounded_pixmap(":/assets/tongyi.png")));
+    ui->actChatGPT->setIcon(QIcon(Gpt::Util::getRoundedPixmap(":/assets/ChatGPT.jpg")));
+    ui->actDoubao->setIcon(QIcon(Gpt::Util::getRoundedPixmap(":/assets/doubao.png")));
+    ui->actYiyan->setIcon(QIcon(Gpt::Util::getRoundedPixmap(":/assets/yiyan.png")));
+    ui->actTongyi->setIcon(QIcon(Gpt::Util::getRoundedPixmap(":/assets/tongyi.png")));
 
-    show_web_view(CHATGPT_URL);
+    QWebEngineCookieStore *cookieStore = view->page()->profile()->cookieStore();
+    cookieManager = new Gpt::CookieManager(cookieStore, this);
+    cookieStore->loadAllCookies();
+    showWebView(CHATGPT_URL);
     setCentralWidget(view);
 }
 
@@ -31,10 +38,17 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete view;
+    delete cookieManager;
 }
 
-void MainWindow::show_web_view(QString url)
+void MainWindow::showWebView(QString url)
 {
+    QString hashedUrl = QString::fromLatin1(url.toUtf8().toHex());
+    QString cookieFilePath = QDir::currentPath()+"/"+hashedUrl+".cookies.dat";
+    qInfo() << "url: " << url << ", Cookie filepath: " << cookieFilePath;
+    cookieManager->setCookieFilePath(cookieFilePath);
+    cookieManager->loadCookies();
+
     view->load(QUrl(url));
     QString script = R"(
 document.documentElement.style.overflow = 'hidden';
@@ -44,7 +58,6 @@ document.body.style.overflow = 'hidden';
 document.body.style.height = '100vh';
 document.body.style.margin = 0;
 )";
-
     view->page()->runJavaScript(script);
 }
 
@@ -58,24 +71,24 @@ document.documentElement.className = 'dark';
 document.documentElement.style.colorScheme = 'light';
 document.documentElement.className = 'light';
 )";
-    show_web_view(CHATGPT_URL);
+    showWebView(CHATGPT_URL);
     view->page()->runJavaScript(dark);
 }
 
 
 void MainWindow::on_actYiyan_triggered()
 {
-    show_web_view(YIYAN_URL);
+    showWebView(YIYAN_URL);
 }
 
 
 void MainWindow::on_actTongyi_triggered()
 {
-    show_web_view(TONGYI_URL);
+    showWebView(TONGYI_URL);
 }
 
 
 void MainWindow::on_actDoubao_triggered()
 {
-    show_web_view(DOUBAO_URL);
+    showWebView(DOUBAO_URL);
 }

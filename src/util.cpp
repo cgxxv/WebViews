@@ -7,7 +7,7 @@
 
 namespace Gpt {
 
-QPixmap Util::get_rounded_pixmap(QString str)
+QPixmap Util::getRoundedPixmap(QString str)
 {
     const QPixmap orig = QPixmap(str);
 

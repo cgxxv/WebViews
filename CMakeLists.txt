@@ -20,6 +20,7 @@ set(PROJECT_SOURCES
         src/mainwindow.ui
         src/util.h src/util.cpp
         src/webengineview.h src/webengineview.cpp
+        src/cookiemanager.h src/cookiemanager.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

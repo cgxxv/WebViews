@@ -1,8 +1,9 @@
 <RCC>
     <qresource prefix="/">
-        <file>assets/ChatGPT.svg</file>
         <file>assets/doubao.png</file>
         <file>assets/tongyi.png</file>
         <file>assets/yiyan.png</file>
+        <file>assets/ChatGPT.jpg</file>
+        <file>assets/ChatGPTs.svg</file>
     </qresource>
 </RCC>

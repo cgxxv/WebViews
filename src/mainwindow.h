@@ -12,6 +12,7 @@ QT_END_NAMESPACE
 
 namespace Gpt {
 class WebEngineView;
+class CookieManager;
 }
 
 class MainWindow : public QMainWindow
@@ -28,11 +29,12 @@ private slots:
     void on_actDoubao_triggered();
 
 private:
-    void show_web_view(QString url);
+    void showWebView(QString url);
 
 private:
     Ui::MainWindow *ui;
     Gpt::WebEngineView *view;
+    Gpt::CookieManager *cookieManager;
 };
 
 #endif // MAINWINDOW_H

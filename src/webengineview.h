@@ -9,7 +9,7 @@ namespace Gpt {
 class WebEngineView : public QWebEngineView
 {
 public:
-    explicit WebEngineView(QWidget *parent = nullptr) : QWebEngineView{parent} {}
+    explicit WebEngineView(QWidget *parent = nullptr);
 
 protected:
     void contextMenuEvent(QContextMenuEvent *event) override;
