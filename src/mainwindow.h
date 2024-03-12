@@ -2,14 +2,17 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
-class QWebEngineView;
+#include <QtWebEngineWidgets/QWebEngineView>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
 }
 QT_END_NAMESPACE
+
+namespace Gpt {
+class WebEngineView;
+}
 
 class MainWindow : public QMainWindow
 {
@@ -20,11 +23,8 @@ public:
 
 private slots:
     void on_actChatGPT_triggered();
-
     void on_actYiyan_triggered();
-
     void on_actTongyi_triggered();
-
     void on_actDoubao_triggered();
 
 private:
@@ -32,7 +32,7 @@ private:
 
 private:
     Ui::MainWindow *ui;
-    QWebEngineView *view;
+    Gpt::WebEngineView *view;
 };
 
 #endif // MAINWINDOW_H

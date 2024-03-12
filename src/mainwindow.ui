@@ -28,26 +28,18 @@
      <string>Switch GPT</string>
     </property>
     <addaction name="actChatGPT"/>
+    <addaction name="actDoubao"/>
     <addaction name="actYiyan"/>
     <addaction name="actTongyi"/>
-    <addaction name="actDoubao"/>
    </widget>
    <addaction name="menuSwitch_GPT"/>
   </widget>
   <action name="actChatGPT">
-   <property name="icon">
-    <iconset resource="../resource.qrc">
-     <normaloff>:/assets/ChatGPT.svg</normaloff>:/assets/ChatGPT.svg</iconset>
-   </property>
    <property name="text">
     <string>ChatGPT</string>
    </property>
   </action>
   <action name="actYiyan">
-   <property name="icon">
-    <iconset resource="../resource.qrc">
-     <normaloff>:/assets/yiyan.png</normaloff>:/assets/yiyan.png</iconset>
-   </property>
    <property name="text">
     <string>文心一言</string>
    </property>
@@ -56,26 +48,16 @@
    </property>
   </action>
   <action name="actTongyi">
-   <property name="icon">
-    <iconset resource="../resource.qrc">
-     <normaloff>:/assets/tongyi.png</normaloff>:/assets/tongyi.png</iconset>
-   </property>
    <property name="text">
     <string>通义千问</string>
    </property>
   </action>
   <action name="actDoubao">
-   <property name="icon">
-    <iconset resource="../resource.qrc">
-     <normaloff>:/assets/doubao.png</normaloff>:/assets/doubao.png</iconset>
-   </property>
    <property name="text">
     <string>字节豆包</string>
    </property>
   </action>
  </widget>
- <resources>
-  <include location="../resource.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

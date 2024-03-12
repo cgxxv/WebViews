@@ -1,7 +1,8 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include "webengineview.h"
+#include "util.h"
 
-#include <QtWebEngineWidgets/QWebEngineView>
 #include <QUrl>
 #include <QIcon>
 
@@ -13,9 +14,15 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow{parent}
     , ui(new Ui::MainWindow)
-    , view(new QWebEngineView)
+    , view(new Gpt::WebEngineView)
 {
     ui->setupUi(this);
+
+    ui->actChatGPT->setIcon(QIcon(Gpt::Util::get_rounded_pixmap(":/assets/ChatGPT.svg")));
+    ui->actDoubao->setIcon(QIcon(Gpt::Util::get_rounded_pixmap(":/assets/doubao.png")));
+    ui->actYiyan->setIcon(QIcon(Gpt::Util::get_rounded_pixmap(":/assets/yiyan.png")));
+    ui->actTongyi->setIcon(QIcon(Gpt::Util::get_rounded_pixmap(":/assets/tongyi.png")));
+
     show_web_view(CHATGPT_URL);
     setCentralWidget(view);
 }
@@ -23,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete view;
 }
 
 void MainWindow::show_web_view(QString url)
@@ -42,7 +50,16 @@ document.body.style.margin = 0;
 
 void MainWindow::on_actChatGPT_triggered()
 {
+    QString dark = R"(
+document.documentElement.style.colorScheme = 'dark';
+document.documentElement.className = 'dark';
+)";
+    QString light = R"(
+document.documentElement.style.colorScheme = 'light';
+document.documentElement.className = 'light';
+)";
     show_web_view(CHATGPT_URL);
+    view->page()->runJavaScript(dark);
 }
 
 
