@@ -7,8 +7,8 @@
 
 int main(int argc, char *argv[])
 {
-    // Gpt::UtilTest test;
-    // QTest::qExec(&test, argc, argv);
+    Gpt::UtilTest test;
+    QTest::qExec(&test, argc, argv);
 
 #ifdef QT_DEBUG
     qputenv("QTWEBENGINE_REMOTE_DEBUGGING", "9999");

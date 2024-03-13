@@ -63,18 +63,18 @@ document.body.style.overflow = 'hidden';
 
 void MainWindow::on_actChatGPT_triggered()
 {
-    // Inject JavaScript to detect system color scheme and apply styles
-    QString script = R"(
-        var prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefersDarkScheme) {
-            document.documentElement.style.colorScheme = 'dark';
-            document.documentElement.className = 'dark';
-        } else {
-            document.documentElement.style.colorScheme = 'light';
-            document.documentElement.className = 'light';
-        }
-    )";
-    view->page()->runJavaScript(script);
+    // // Inject JavaScript to detect system color scheme and apply styles
+    // QString script = R"(
+    //     var prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    //     if (prefersDarkScheme) {
+    //         document.documentElement.style.colorScheme = 'dark';
+    //         document.documentElement.className = 'dark';
+    //     } else {
+    //         document.documentElement.style.colorScheme = 'light';
+    //         document.documentElement.className = 'light';
+    //     }
+    // )";
+    // view->page()->runJavaScript(script);
 
     showWebView(CHATGPT_URL);
 }
