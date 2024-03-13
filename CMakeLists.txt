@@ -9,8 +9,13 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets WebEngineWidgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets WebEngineWidgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets WebEngineWidgets Test)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets WebEngineWidgets Test)
+
+# Find OpenSSL
+find_package(OpenSSL REQUIRED)
+# Add the include directory of OpenSSL to include directories
+include_directories(${OPENSSL_INCLUDE_DIR})
 
 set(PROJECT_SOURCES
         ChatGPTs.icns
@@ -21,6 +26,8 @@ set(PROJECT_SOURCES
         src/util.h src/util.cpp
         src/webengineview.h src/webengineview.cpp
         src/cookiemanager.h src/cookiemanager.cpp
+        src/util_test.h
+
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -46,7 +53,12 @@ else()
     endif()
 endif()
 
-target_link_libraries(ChatGPTs PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::WebEngineWidgets)
+target_link_libraries(ChatGPTs PRIVATE
+    Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::WebEngineWidgets
+    Qt${QT_VERSION_MAJOR}::Test
+    ${OPENSSL_LIBRARIES}
+)
 
 set_target_properties(ChatGPTs PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER com.github.cgxxv.ChatGPTs

@@ -18,7 +18,7 @@ public:
     explicit CookieManager(QWebEngineCookieStore *cookieStore, QObject *parent = nullptr);
     ~CookieManager();
 
-    void setCookieFilePath(const QString &cookieFilePath);
+    void setCookieFile(const QString &url);
     void saveAllCookies();
     void loadCookies();
 
@@ -28,7 +28,7 @@ private slots:
 
 private:
     QWebEngineCookieStore *m_cookieStore;
-    QString m_cookieFilepath;
+    QString m_cookieFile, m_cookieDir;
     QMap<QString, QList<QNetworkCookie>> m_cookies;
 };
 

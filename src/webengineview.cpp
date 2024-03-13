@@ -4,11 +4,7 @@
 
 namespace Gpt {
 
-WebEngineView::WebEngineView(QWidget *parent)
-    : QWebEngineView{parent}
-{
-
-}
+WebEngineView::WebEngineView(QWidget *parent) : QWebEngineView{parent} {}
 
 void WebEngineView::contextMenuEvent(QContextMenuEvent *event)
 {

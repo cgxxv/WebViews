@@ -8,7 +8,6 @@
 #include <QIcon>
 #include <QWebEngineCookieStore>
 #include <QWebEngineProfile>
-#include <QDir>
 
 #define CHATGPT_URL "https://chat.openai.com"
 #define YIYAN_URL "https://yiyan.baidu.com"
@@ -43,10 +42,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::showWebView(QString url)
 {
-    QString hashedUrl = QString::fromLatin1(url.toUtf8().toHex());
-    QString cookieFilePath = QDir::currentPath()+"/"+hashedUrl+".cookies.dat";
-    qInfo() << "url: " << url << ", Cookie filepath: " << cookieFilePath;
-    cookieManager->setCookieFilePath(cookieFilePath);
+    cookieManager->setCookieFile(url);
     cookieManager->loadCookies();
 
     view->load(QUrl(url));
@@ -75,12 +71,7 @@ document.documentElement.className = 'light';
     view->page()->runJavaScript(dark);
 }
 
-
-void MainWindow::on_actYiyan_triggered()
-{
-    showWebView(YIYAN_URL);
-}
-
+void MainWindow::on_actYiyan_triggered() { showWebView(YIYAN_URL); }
 
 void MainWindow::on_actTongyi_triggered()
 {
