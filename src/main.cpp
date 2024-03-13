@@ -7,8 +7,8 @@
 
 int main(int argc, char *argv[])
 {
-    Gpt::UtilTest test;
-    QTest::qExec(&test, argc, argv);
+    // Gpt::UtilTest test;
+    // QTest::qExec(&test, argc, argv);
 
 #ifdef QT_DEBUG
     qputenv("QTWEBENGINE_REMOTE_DEBUGGING", "9999");
@@ -18,9 +18,9 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     a.setWindowIcon(QIcon(":/assets/ChatGPTs.svg"));
 
-    Gpt::ColorScheme colorScheme(a.styleHints());
+    auto colorScheme = new Gpt::ColorScheme(a.styleHints());
 
-    MainWindow w(&colorScheme);
+    MainWindow w(colorScheme);
     w.resize(1024, 768);
     w.show();
 

@@ -25,10 +25,10 @@ set(PROJECT_SOURCES
         src/mainwindow.ui
         src/util.h src/util.cpp
         src/webengineview.h
-        src/cookiemanager.h src/cookiemanager.cpp
+
         src/util_test.h
         src/colorscheme.h
-        src/profilemanager.h src/profilemanager.cpp
+        src/profilemanager.h
 
 )
 

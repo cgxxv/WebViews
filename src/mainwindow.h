@@ -12,8 +12,8 @@ QT_END_NAMESPACE
 
 namespace Gpt {
 class WebEngineView;
-class CookieManager;
 class ColorScheme;
+class ProfileManager;
 }
 
 class MainWindow : public QMainWindow
@@ -36,8 +36,8 @@ private:
 private:
     Ui::MainWindow *ui;
     Gpt::WebEngineView *view;
-    Gpt::CookieManager *cookieManager;
     Gpt::ColorScheme *colorScheme;
+    Gpt::ProfileManager *profileManager;
 };
 
 #endif // MAINWINDOW_H

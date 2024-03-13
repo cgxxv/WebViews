@@ -35,11 +35,11 @@ private slots:
     {
         m_scheme = colorScheme;
         if (colorScheme == Qt::ColorScheme::Dark) {
-            qDebug() << "暗色主题";
+            qDebug() << "dark theme";
         } else if (colorScheme == Qt::ColorScheme::Light) {
-            qDebug() << "亮色主题";
+            qDebug() << "light theme";
         } else {
-            qDebug() << "未知主题";
+            qDebug() << "unknown theme";
         }
     }
 

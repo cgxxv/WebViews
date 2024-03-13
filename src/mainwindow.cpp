@@ -2,17 +2,15 @@
 #include "./ui_mainwindow.h"
 #include "webengineview.h"
 #include "util.h"
-#include "cookiemanager.h"
 #include "colorscheme.h"
+#include "profilemanager.h"
 
 #include <QUrl>
 #include <QIcon>
 #include <QWebEngineCookieStore>
-#include <QWebEngineProfile>
 #include <QWebEngineScript>
 #include <QWebEngineScriptCollection>
 #include <QWebEngineSettings>
-#include <QWebEnginePage>
 
 #define CHATGPT_URL "https://chat.openai.com"
 #define YIYAN_URL "https://yiyan.baidu.com"
@@ -24,6 +22,7 @@ MainWindow::MainWindow(Gpt::ColorScheme *scheme, QWidget *parent)
     , ui(new Ui::MainWindow)
     , view(new Gpt::WebEngineView)
     , colorScheme(scheme)
+    , profileManager(new Gpt::ProfileManager)
 {
     ui->setupUi(this);
     setCentralWidget(view);
@@ -33,9 +32,6 @@ MainWindow::MainWindow(Gpt::ColorScheme *scheme, QWidget *parent)
     ui->actYiyan->setIcon(QIcon(Gpt::Util::getRoundedPixmap(":/assets/yiyan.png")));
     ui->actTongyi->setIcon(QIcon(Gpt::Util::getRoundedPixmap(":/assets/tongyi.png")));
 
-    QWebEngineCookieStore *cookieStore = view->page()->profile()->cookieStore();
-    cookieManager = new Gpt::CookieManager(cookieStore, this);
-    cookieStore->loadAllCookies();
     on_actChatGPT_triggered();
 }
 
@@ -43,13 +39,15 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete view;
-    delete cookieManager;
+    delete colorScheme;
+    delete profileManager;
 }
 
 void MainWindow::showWebView(QString url)
 {
-    cookieManager->setCookieFile(url);
-    cookieManager->loadCookies();
+    auto page = profileManager->getProfile(url);
+    view->setPage(page);
+    page->setDevToolsPage(view->page());
 
     QString script = R"(
 document.documentElement.style.overflow = 'hidden';
@@ -65,44 +63,18 @@ document.body.style.overflow = 'hidden';
 
 void MainWindow::on_actChatGPT_triggered()
 {
-    // // Inject JavaScript to detect system color scheme and apply styles
-    // QString script = R"(
-    //     var prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    //     if (prefersDarkScheme) {
-    //         document.documentElement.style.colorScheme = 'dark';
-    //         document.documentElement.className = 'dark';
-    //     } else {
-    //         document.documentElement.style.colorScheme = 'light';
-    //         document.documentElement.className = 'light';
-    //     }
-    // )";
-
-    QString dark = R"(
-document.documentElement.style.colorScheme = 'dark';
-document.documentElement.className = 'dark';
-)";
-    QString light = R"(
-document.documentElement.style.colorScheme = 'light';
-document.documentElement.className = 'light';
-)";
-    QWebEngineScript userScript;
-    // userScript.setName("SetColorScheme");
-    userScript.setInjectionPoint(QWebEngineScript::DocumentReady);
-    // userScript.setRunsOnSubFrames(false);
-    userScript.setWorldId(QWebEngineScript::ApplicationWorld);
-
-    if (colorScheme->isDarkMode())
-    {
-        // view->page()->runJavaScript(dark);
-        userScript.setSourceCode(dark);
-    }
-    else if (colorScheme->isLightMode())
-    {
-        // view->page()->runJavaScript(light);
-        userScript.setSourceCode(light);
-    }
-
-    view->page()->scripts().insert(userScript);
+    // Inject JavaScript to detect system color scheme and apply styles
+    QString script = R"(
+        var prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDarkScheme) {
+            document.documentElement.style.colorScheme = 'dark';
+            document.documentElement.className = 'dark';
+        } else {
+            document.documentElement.style.colorScheme = 'light';
+            document.documentElement.className = 'light';
+        }
+    )";
+    view->page()->runJavaScript(script);
 
     showWebView(CHATGPT_URL);
 }
