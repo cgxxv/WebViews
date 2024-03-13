@@ -4,6 +4,4 @@ ChatGPTs is a QtWebEngine-based project, a collection of GPTs. Currently include
 
 ## TODOs
 
-1. UI for user secret key
-2. Adapt with system appearance mode
-3. Web page shakes when scrolling in ChatGPT, 文心一言, 通义千问 
+1. Adapt with system appearance mode
