@@ -28,7 +28,7 @@ private slots:
 
 private:
     QWebEngineCookieStore *m_cookieStore;
-    QString m_cookieFile, m_cookieDir;
+    QString m_cookieFile;
     QMap<QString, QList<QNetworkCookie>> m_cookies;
 };
 

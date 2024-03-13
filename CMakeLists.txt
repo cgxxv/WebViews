@@ -24,9 +24,11 @@ set(PROJECT_SOURCES
         resource.qrc
         src/mainwindow.ui
         src/util.h src/util.cpp
-        src/webengineview.h src/webengineview.cpp
+        src/webengineview.h
         src/cookiemanager.h src/cookiemanager.cpp
         src/util_test.h
+        src/colorscheme.h
+        src/profilemanager.h src/profilemanager.cpp
 
 )
 
@@ -34,7 +36,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(ChatGPTs
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        README.md
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET ChatGPTs APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

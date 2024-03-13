@@ -3,16 +3,20 @@
 
 #include <QtWebEngineWidgets/QWebEngineView>
 #include <QWidget>
+#include <QContextMenuEvent>
 
 namespace Gpt {
 
 class WebEngineView : public QWebEngineView
 {
 public:
-    explicit WebEngineView(QWidget *parent = nullptr);
+    explicit WebEngineView(QWidget *parent = nullptr) : QWebEngineView{parent} {}
 
-protected:
-    void contextMenuEvent(QContextMenuEvent *event) override;
+// protected:
+//     void contextMenuEvent(QContextMenuEvent *event)
+//     {
+//         event->ignore();
+//     }
 };
 
 }

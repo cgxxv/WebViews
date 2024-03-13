@@ -20,21 +20,6 @@ CookieManager::CookieManager(QWebEngineCookieStore *cookieStore, QObject *parent
     // Connect signals to handle cookie changes
     connect(cookieStore, &QWebEngineCookieStore::cookieAdded, this, &CookieManager::on_cookie_added);
     connect(cookieStore, &QWebEngineCookieStore::cookieRemoved, this, &CookieManager::on_cookie_removed);
-
-#ifdef Q_OS_WIN
-    // Windows: Set the cookie path to %LOCALAPPDATA%/YourAppName
-    QString cookieDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/ChatGPTs";
-#elif defined(Q_OS_MACOS)
-    // macOS: Set the cookie path to ~/Library/Application Support/YourAppName
-    QString cookieDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/ChatGPTs";
-#elif defined(Q_OS_LINUX)
-    // Linux: Set the cookie path to ~/.local/share/YourAppName
-    QString cookieDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/ChatGPTs";
-#else
-    // Default: Set the cookie path to a generic directory
-    QString cookieDir = QDir::homePath() + "/.cache/ChatGPTs";
-#endif
-    m_cookieDir = cookieDir;
 }
 
 CookieManager::~CookieManager()
@@ -45,7 +30,7 @@ CookieManager::~CookieManager()
 void CookieManager::setCookieFile(const QString &url)
 {
     QString hashedUrl = QString::fromLatin1(url.toUtf8().toHex());
-    QString cookieFile = m_cookieDir+"/"+hashedUrl+".cookies.dat";
+    QString cookieFile = Util::getStorageDir()+"/"+hashedUrl+".cookies.dat";
     qInfo() << "url: " << url << ", Cookie file: " << cookieFile;
 
     // TODO: need a lock for doing this?

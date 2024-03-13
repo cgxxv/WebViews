@@ -6,6 +6,7 @@
 #include <QPainterPath>
 #include <QPixmap>
 #include <QString>
+#include <QStandardPaths>
 
 #include <openssl/err.h>
 #include <openssl/evp.h>
@@ -171,6 +172,24 @@ QByteArray Util::decryptData(const QByteArray &ciphertext,
     EVP_CIPHER_CTX_free(ctx);
     plaintext.resize(plaintext_len);
     return plaintext;
+}
+
+QString Util::getStorageDir()
+{
+#ifdef Q_OS_WIN
+    // Windows: Set the cookie path to %LOCALAPPDATA%/YourAppName
+    QString storageDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/ChatGPTs";
+#elif defined(Q_OS_MACOS)
+    // macOS: Set the cookie path to ~/Library/Application Support/YourAppName
+    QString storageDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/ChatGPTs";
+#elif defined(Q_OS_LINUX)
+    // Linux: Set the cookie path to ~/.local/share/YourAppName
+    QString storageDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/ChatGPTs";
+#else
+    // Default: Set the cookie path to a generic directory
+    QString storageDir = QDir::homePath() + "/.cache/ChatGPTs";
+#endif
+    return storageDir;
 }
 
 void Util::handleOpenSSLErrors() {
