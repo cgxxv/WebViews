@@ -17,6 +17,8 @@ public:
     static QByteArray encryptData(const QByteArray &data, const QByteArray &key);
     static QByteArray decryptData(const QByteArray &encryptedData, const QByteArray &key);
 
+    static QString getStorageDir();
+
 private:
     static void handleOpenSSLErrors();
 };
