@@ -50,12 +50,21 @@ jobs:
           ls -al build
 
       - name: Package Application
+        env:
+          QT_VERSION: ${{ matrix.qt.version }}
+          CMAKE_PREFIX_PATH: ${{ env.Qt6_DIR }}/lib/cmake
+          CMAKE_BUILD_TYPE: Release
         run: |
           cd build
           os=$(echo "${{ matrix.os }}" | sed 's/-latest//')
           repository_name=$(basename ${{ github.repository }})
           zipfile=${repository_name}-${os}-${{ matrix.arch }}-${{ github.run_number }}.zip
-          zip -r ${zipfile} ${repository_name}
+          mkdir ${{ env.CMAKE_BUILD_TYPE }}
+          mv ${repository_name} ${{ env.CMAKE_BUILD_TYPE }}
+          curl -OL https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
+          chmod +x linuxdeployqt-continuous-x86_64.AppImage
+          ./linuxdeployqt-continuous-x86_64.AppImage ${{ env.CMAKE_BUILD_TYPE }}/${repository_name} -appimage
+          zip -r ${zipfile} ${{ env.CMAKE_BUILD_TYPE }}/${repository_name}
           mv ${zipfile} ..
           cd ..
           ls -al

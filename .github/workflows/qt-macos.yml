@@ -54,6 +54,7 @@ jobs:
           os=$(echo "${{ matrix.os }}" | sed 's/-latest//')
           repository_name=$(basename ${{ github.repository }})
           zipfile=${repository_name}-${os}-${{ matrix.arch }}-${{ github.run_number }}.zip
+          macdeployqt ${repository_name}.app -always-overwrite
           zip -r ${zipfile} ${repository_name}.app
           mv ${zipfile} ../..
           cd ../..
