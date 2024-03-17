@@ -61,6 +61,7 @@ jobs:
           zipfile=${repository_name}-${os}-${{ matrix.arch }}-${{ github.run_number }}.zip
           mkdir ${{ env.CMAKE_BUILD_TYPE }}
           mv ${repository_name} ${{ env.CMAKE_BUILD_TYPE }}
+          sudo apt-get install libfuse2 -y
           curl -OL https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
           chmod +x linuxdeployqt-continuous-x86_64.AppImage
           ./linuxdeployqt-continuous-x86_64.AppImage ${{ env.CMAKE_BUILD_TYPE }}/${repository_name} -appimage

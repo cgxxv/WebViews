@@ -71,12 +71,12 @@ jobs:
           CMAKE_BUILD_TYPE: Release
         run: |
           cd build
-          $os = ${{ matrix.os }} -replace "-latest", ""
-          $repositoryName = ${{ github.repository }} -replace ".*/", ""
+          $os = "${{ matrix.os }}" -replace "-latest", ""
+          $repositoryName = "${{ github.repository }}" -replace ".*/", ""
           $zipfile = "${repositoryName}-${os}-${{ matrix.arch }}-${{ github.run_number }}.zip"
           windeployqt ${env:CMAKE_BUILD_TYPE}\${repositoryName}.exe
-          Compress-Archive -Path ${env:CMAKE_BUILD_TYPE} -DestinationPath ${zipfile}
-          Move-Item ${zipfile} ..
+          Compress-Archive -Path "${env:CMAKE_BUILD_TYPE}" -DestinationPath "${zipfile}"
+          Move-Item "${zipfile}" ..
           cd ..
           Get-ChildItem
           echo "${zipfile}" > assets.txt
