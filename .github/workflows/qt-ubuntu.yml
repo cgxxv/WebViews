@@ -62,7 +62,7 @@ jobs:
           mkdir ${{ env.CMAKE_BUILD_TYPE }}
           mv ${repository_name} ${{ env.CMAKE_BUILD_TYPE }}
           sudo apt-get install libfuse2 -y
-          curl -OL https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
+          curl -o linuxdeployqt-continuous-x86_64.AppImage -L "https://objects.githubusercontent.com/github-production-release-asset-2e65be/67432158/137d29d0-c2cb-4d78-87c1-d82572655a59?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=releaseassetproduction%2F20240601%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240601T154743Z&X-Amz-Expires=300&X-Amz-Signature=463a072830bf54e998cbd0bf155a7758fa41dfc7d613e88a864135d91116850c&X-Amz-SignedHeaders=host&actor_id=6456505&key_id=0&repo_id=67432158&response-content-disposition=attachment%3B%20filename%3Dlinuxdeployqt-continuous-x86_64.AppImage&response-content-type=application%2Foctet-stream"
           chmod +x linuxdeployqt-continuous-x86_64.AppImage
           ./linuxdeployqt-continuous-x86_64.AppImage ${{ env.CMAKE_BUILD_TYPE }}/${repository_name} -appimage
           zip -r ${zipfile} ${{ env.CMAKE_BUILD_TYPE }}/${repository_name}
