@@ -1,11 +1,15 @@
 #ifndef COLORSCHEME_H
 #define COLORSCHEME_H
 
-#include <QApplication>
+#include "webengineview.h"
+
 #include <QStyleHints>
 #include <QObject>
-#include <QDebug>
-#include <QPalette>
+
+#define GPT_CHATGPT 0
+#define GPT_YIYAN 1
+#define GPT_TONGYI 2
+#define GPT_DOUBAO 3
 
 namespace Gpt
 {
@@ -14,37 +18,21 @@ class ColorScheme : public QObject
 {
     Q_OBJECT
 public:
-    explicit ColorScheme(QStyleHints *styleHints, QObject *parent = nullptr) : QObject(parent)
-    {
-        connect(styleHints, &QStyleHints::colorSchemeChanged, this, &ColorScheme::handleChanged);
-        m_scheme = styleHints->colorScheme();
-    }
+    explicit ColorScheme(QStyleHints *styleHints, WebEngineView *view, QObject *parent = nullptr);
 
-    bool isDarkMode()
-    {
-        return m_scheme == Qt::ColorScheme::Dark;
-    }
-
-    bool isLightMode()
-    {
-        return m_scheme == Qt::ColorScheme::Light;
-    }
+    bool isDarkMode();
+    bool isLightMode();
+    void setCurrentGpt(qint8 current);
+    QString getDarkModeScript();
+    QString getLightModeScript();
 
 private slots:
-    void handleChanged(Qt::ColorScheme colorScheme)
-    {
-        m_scheme = colorScheme;
-        if (colorScheme == Qt::ColorScheme::Dark) {
-            qDebug() << "dark theme";
-        } else if (colorScheme == Qt::ColorScheme::Light) {
-            qDebug() << "light theme";
-        } else {
-            qDebug() << "unknown theme";
-        }
-    }
+    void handleChanged(Qt::ColorScheme colorScheme);
 
 private:
     Qt::ColorScheme m_scheme;
+    qint8 m_gpt;
+    WebEngineView *view;
 };
 
 }

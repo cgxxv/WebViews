@@ -18,10 +18,11 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     a.setWindowIcon(QIcon(":/assets/ChatGPTs.svg"));
 
-    auto colorScheme = new Gpt::ColorScheme(a.styleHints());
+    auto view = new Gpt::WebEngineView;
+    auto colorScheme = new Gpt::ColorScheme(a.styleHints(), view);
 
-    MainWindow w(colorScheme);
-    w.resize(1024, 768);
+    MainWindow w(colorScheme, view);
+    w.resize(1280, 768);
     w.show();
 
     return a.exec();

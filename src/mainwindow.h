@@ -20,7 +20,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit MainWindow(Gpt::ColorScheme *scheme, QWidget *parent = nullptr);
+    explicit MainWindow(Gpt::ColorScheme *scheme, Gpt::WebEngineView *view, QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
@@ -30,7 +30,7 @@ private slots:
     void on_actDoubao_triggered();
 
 private:
-    void syncBgColorStyle();
+    // void syncBgColorStyle();
     void showWebView(QString url);
 
 private:

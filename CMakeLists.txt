@@ -9,8 +9,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets WebEngineWidgets Test)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets WebEngineWidgets Test)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets WebEngineCore WebEngineWidgets Test Gui)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets WebEngineCore WebEngineWidgets Test Gui)
 
 # Find OpenSSL
 find_package(OpenSSL REQUIRED)
@@ -25,9 +25,7 @@ set(PROJECT_SOURCES
         src/mainwindow.ui
         src/util.h src/util.cpp
         src/webengineview.h
-
         src/util_test.h
-        src/colorscheme.h
         src/profilemanager.h
 
 )
@@ -36,6 +34,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(ChatGPTs
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        src/colorscheme.h src/colorscheme.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET ChatGPTs APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -57,8 +56,10 @@ endif()
 
 target_link_libraries(ChatGPTs PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::WebEngineCore
     Qt${QT_VERSION_MAJOR}::WebEngineWidgets
     Qt${QT_VERSION_MAJOR}::Test
+    Qt${QT_VERSION_MAJOR}::Gui
     ${OPENSSL_LIBRARIES}
 )
 

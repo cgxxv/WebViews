@@ -17,10 +17,10 @@
 #define TONGYI_URL "https://tongyi.aliyun.com/qianwen"
 #define DOUBAO_URL "https://www.doubao.com"
 
-MainWindow::MainWindow(Gpt::ColorScheme *scheme, QWidget *parent)
+MainWindow::MainWindow(Gpt::ColorScheme *scheme, Gpt::WebEngineView *view, QWidget *parent)
     : QMainWindow{parent}
     , ui(new Ui::MainWindow)
-    , view(new Gpt::WebEngineView)
+    , view(view)
     , colorScheme(scheme)
     , profileManager(new Gpt::ProfileManager)
 {
@@ -53,6 +53,14 @@ void MainWindow::showWebView(QString url)
 document.documentElement.style.overflow = 'hidden';
 document.body.style.overflow = 'hidden';
 )";
+    if (colorScheme->isDarkMode()) {
+        qDebug() << "in dark mode";
+        script.append(colorScheme->getDarkModeScript());
+    } else {
+        qDebug() << "in light mode";
+        script.append(colorScheme->getLightModeScript());
+    }
+
     QWebEngineScript userScript;
     userScript.setInjectionPoint(QWebEngineScript::DocumentReady);
     userScript.setSourceCode(script);
@@ -63,63 +71,25 @@ document.body.style.overflow = 'hidden';
 
 void MainWindow::on_actChatGPT_triggered()
 {
-    // // Inject JavaScript to detect system color scheme and apply styles
-    // QString script = R"(
-    //     var prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    //     if (prefersDarkScheme) {
-    //         document.documentElement.style.colorScheme = 'dark';
-    //         document.documentElement.className = 'dark';
-    //     } else {
-    //         document.documentElement.style.colorScheme = 'light';
-    //         document.documentElement.className = 'light';
-    //     }
-    // )";
-    // view->page()->runJavaScript(script);
-
+    colorScheme->setCurrentGpt(GPT_CHATGPT);
     showWebView(CHATGPT_URL);
 }
 
 void MainWindow::on_actYiyan_triggered()
 {
+    colorScheme->setCurrentGpt(GPT_YIYAN);
     showWebView(YIYAN_URL);
 }
 
 void MainWindow::on_actTongyi_triggered()
 {
+    colorScheme->setCurrentGpt(GPT_TONGYI);
     showWebView(TONGYI_URL);
 }
 
 
 void MainWindow::on_actDoubao_triggered()
 {
+    colorScheme->setCurrentGpt(GPT_DOUBAO);
     showWebView(DOUBAO_URL);
-}
-
-void MainWindow::syncBgColorStyle()
-{
-    QString dark = R"(
-document.documentElement.style.background = '#212121';
-document.documentElement.style.backgroundColor = '#212121';
-document.documentElement.style.color = '#ffffff';
-document.body.style.background = '#212121';
-document.body.style.backgroundColor = '#212121';
-document.body.style.color = '#ffffff';
-)";
-    QString light = R"(
-document.documentElement.style.background = '#ffffff';
-document.documentElement.style.backgroundColor = '#ffffff';
-document.documentElement.style.color = '#000000';
-document.body.style.background = '#ffffff';
-document.body.style.backgroundColor = '#ffffff';
-document.body.style.color = '#000000';
-)";
-    QWebEngineScript userScript;
-    userScript.setInjectionPoint(QWebEngineScript::DocumentReady);
-
-    if (colorScheme->isDarkMode())
-        userScript.setSourceCode(dark);
-    else if (colorScheme->isLightMode())
-        userScript.setSourceCode(light);
-
-    view->page()->scripts().insert(userScript);
 }
