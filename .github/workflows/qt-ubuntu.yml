@@ -66,13 +66,13 @@ jobs:
           chmod +x linuxdeployqt-continuous-x86_64.AppImage
           ./linuxdeployqt-continuous-x86_64.AppImage ${{ env.CMAKE_BUILD_TYPE }}/${repository_name} -appimage
           zip -r ${zipfile} ${{ env.CMAKE_BUILD_TYPE }}/${repository_name}
-          mv ${zipfile} ..
+          mkdir ../target
+          mv ${zipfile} ../target
           cd ..
           ls -al
-          echo "${zipfile}" > assets.txt
 
       - name: Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: $(cat assets.txt)
+          files: target/*.zip
