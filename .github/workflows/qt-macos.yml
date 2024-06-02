@@ -56,13 +56,15 @@ jobs:
           zipfile=${repository_name}-${os}-${{ matrix.arch }}-${{ github.run_number }}.zip
           macdeployqt ${repository_name}.app -always-overwrite
           zip -r ${zipfile} ${repository_name}.app
-          mkdir ../../target
-          mv ${zipfile} ../../target
+          # mkdir ../../target
+          mv ${zipfile} ../
           cd ../..
           ls -al
 
       - name: Release
         uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: target/*.zip
+          files: build/*.zip

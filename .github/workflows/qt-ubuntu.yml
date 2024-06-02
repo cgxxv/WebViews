@@ -66,13 +66,15 @@ jobs:
           chmod +x linuxdeployqt-continuous-x86_64.AppImage
           ./linuxdeployqt-continuous-x86_64.AppImage ${{ env.CMAKE_BUILD_TYPE }}/${repository_name} -appimage
           zip -r ${zipfile} ${{ env.CMAKE_BUILD_TYPE }}/${repository_name}
-          mkdir ../target
-          mv ${zipfile} ../target
+          # mkdir ../target
+          # mv ${zipfile} ../target
           cd ..
           ls -al
 
       - name: Release
         uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: target/*.zip
+          files: build/*.zip

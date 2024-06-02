@@ -76,13 +76,15 @@ jobs:
           $zipfile = "${repositoryName}-${os}-${{ matrix.arch }}-${{ github.run_number }}.zip"
           windeployqt ${env:CMAKE_BUILD_TYPE}\${repositoryName}.exe
           Compress-Archive -Path "${env:CMAKE_BUILD_TYPE}" -DestinationPath "${zipfile}"
-          New-Item -ItemType Directory -Path "../target"
-          Move-Item "${zipfile}" "../target"
+          # New-Item -ItemType Directory -Path "../target"
+          # Move-Item "${zipfile}" "../target"
           cd ..
           Get-ChildItem
 
       - name: Release
         uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: target/*.zip
+          files: build/*.zip
