@@ -8,14 +8,13 @@ on:
   pull_request:
     branches:
       - main
-  release:
-    types: [published]
 jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-22.04]
+        arch: [arm64, x86_64]
         qt:
           - version: 6.5.3
             modules: qtwebengine qtwebchannel qtpositioning
@@ -49,7 +48,7 @@ jobs:
           cd ..
           ls -al build
 
-      - name: Package Application
+      - name: Application
         env:
           QT_VERSION: ${{ matrix.qt.version }}
           CMAKE_PREFIX_PATH: ${{ env.Qt6_DIR }}/lib/cmake

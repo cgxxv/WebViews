@@ -8,8 +8,6 @@ on:
   pull_request:
     branches:
       - main
-  release:
-    types: [published]
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -48,7 +46,7 @@ jobs:
           cd ../..
           ls -al build/${{ matrix.arch }}
 
-      - name: Package Application
+      - name: Application
         run: |
           cd build/${{ matrix.arch }}
           os=$(echo "${{ matrix.os }}" | sed 's/-latest//')

@@ -8,13 +8,13 @@ on:
   pull_request:
     branches:
       - main
-  release:
-    types: [published]
 jobs:
   build:
     runs-on: windows-latest
     strategy:
       matrix:
+        os: [windows-latest]
+        arch: [arm64, x86_64]
         qt:
           - version: 6.5.3
             modules: qtwebengine qtwebchannel qtpositioning
@@ -63,7 +63,7 @@ jobs:
           cd ..
           Get-ChildItem build
 
-      - name: Package Application
+      - name: Application
         shell: powershell
         env:
           QT_VERSION: ${{ matrix.qt.version }}
