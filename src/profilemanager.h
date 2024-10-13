@@ -28,6 +28,10 @@ public:
         QString storagePath = Util::getStorageDir() + "/" + md5sum.toHex();
 
         auto profile = new QWebEngineProfile(md5sum.toHex());
+        auto settings = profile->settings();
+        settings->setAttribute(QWebEngineSettings::JavascriptCanAccessClipboard, true);
+        settings->setAttribute(QWebEngineSettings::JavascriptCanPaste, true);
+
         profile->setPersistentStoragePath(storagePath);
 
         page = new QWebEnginePage(profile);
