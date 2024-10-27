@@ -1,6 +1,8 @@
 # ChatGPTs
 
-ChatGPTs is a QtWebEngine-based project, a collection of GPTs. Currently includes [ChatGPT](chat.openai.com), [Doubao](www.doubao.com), [文心一言](yiyan.baidu.com), [通义千问](tongyi.aliyun.com).
+ChatGPTs [swift version](https://github.com/cgxxv/ChatGPTs/tree/main) is a simple [WebKit](https://webkit.org/) project, user can collect any websites.
+
+[Qt version](https://github.com/cgxxv/ChatGPTs/tree/qt) is a simple [QtWebEngine](https://wiki.qt.io/QtWebEngine) project, currently includes [ChatGPT](https://chat.openai.com), [Doubao](https://www.doubao.com), [文心一言](https://yiyan.baidu.com), [通义千问](https://tongyi.aliyun.com).
 
 ## Dependencies
 
@@ -14,8 +16,3 @@ Only need some basic runtime libraries. Have not dig into it.
 
 ### Linux
 - Did Not Test
-
-## TODOs
-
-1. Adapt with system appearance mode
-2. Pack app with system library for Windows, MacOS, Linux
