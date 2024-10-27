@@ -9,11 +9,11 @@ import SwiftUI
 
 struct ChatGPTsList: View {
     @EnvironmentObject var modelData: ModelData
-
+    
     var body: some View {
         NavigationSplitView {
             List(modelData.chatGPTs) { chatGPT in
-                NavigationLink(chatGPT.name) {
+                NavigationLink(chatGPT.id) {
                     ChatGPTsDetail(chatGPT: chatGPT)
                 }
             }

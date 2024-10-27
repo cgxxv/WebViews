@@ -25,13 +25,11 @@ struct SimpleWebView: NSViewRepresentable {
         let webView = WKWebView(frame: .zero, configuration: configuration)
         let request = URLRequest(url: chatGPT.url)
         webView.load(request)
-        
+
         return webView
     }
-    
+
     func updateNSView(_ nsView: WKWebView, context: Context) {
-        debugPrint(chatGPT)
-        
         let request = URLRequest(url: chatGPT.url)
         nsView.load(request)
     }
@@ -39,10 +37,10 @@ struct SimpleWebView: NSViewRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
-    
+
     class Coordinator: NSObject, WKNavigationDelegate {
         var parent: SimpleWebView
-        
+
         init(_ parent: SimpleWebView) {
             self.parent = parent
         }

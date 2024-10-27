@@ -11,9 +11,7 @@ struct ChatGPTsDetail: View {
     let chatGPT: ChatGPT
     
     var body: some View {
-        print("switch to \(chatGPT)")
         return SimpleWebView(chatGPT: chatGPT)
-            .frame(width: 1024, height: 768)
     }
 }
 

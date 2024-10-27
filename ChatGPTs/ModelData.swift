@@ -16,7 +16,7 @@ struct ChatGPT: Codable, Hashable, Identifiable {
 enum ChatGPTsError: LocalizedError {
 //    case invalidUUID(String)
     case invalidURL(String)
-    
+
     var errorDescription: String? {
         switch self {
 //        case .invalidUUID(let message): return message
@@ -26,7 +26,7 @@ enum ChatGPTsError: LocalizedError {
 }
 
 class ModelData: ObservableObject {
-    var chatGPTs: [ChatGPT]
+    @Published var chatGPTs: [ChatGPT]
 
     init() {
         if let loadedChatGPTs: [ChatGPT] = load() {

@@ -10,18 +10,5 @@ import SwiftUI
 struct ChatGPTsCommands: Commands {
     var body: some Commands {
         SidebarCommands()
-        
-        CommandMenu("Switch GPT") {
-            Button {
-                print("chatgpt clicked")
-            } label: {
-                Text("ChatGPT")
-            }
-            Button {
-                print("doubao clicked")
-            } label: {
-                Text("Doubao")
-            }
-        }
     }
 }

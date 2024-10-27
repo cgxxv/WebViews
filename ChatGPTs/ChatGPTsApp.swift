@@ -16,7 +16,7 @@ struct ChatGPTsApp: App {
             ChatGPTsList()
                 .environmentObject(modelData)
         }
-//        .commandsRemoved()
+        .commandsRemoved()
         .commands {
             ChatGPTsCommands()
         }
