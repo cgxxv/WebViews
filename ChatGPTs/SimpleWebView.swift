@@ -23,6 +23,9 @@ struct SimpleWebView: NSViewRepresentable {
         configuration.websiteDataStore = dataStore
 
         let webView = WKWebView(frame: .zero, configuration: configuration)
+
+        webView.uiDelegate = context.coordinator as? WKUIDelegate
+
         let request = URLRequest(url: chatGPT.url)
         webView.load(request)
 
@@ -43,6 +46,22 @@ struct SimpleWebView: NSViewRepresentable {
 
         init(_ parent: SimpleWebView) {
             self.parent = parent
+        }
+
+        // implement file upload dialog process
+        func webView(_ webView: WKWebView, runOpenPanelWithFileChooserParameters parameters: WKOpenPanelParameters, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping ([URL]?) -> Void) {
+            let openPanel = NSOpenPanel()
+            openPanel.allowsMultipleSelection = true
+            openPanel.canChooseFiles = true
+            openPanel.canChooseDirectories = false
+
+            openPanel.begin { response in
+                if response == .OK, let url = openPanel.urls.first {
+                    completionHandler([url])
+                } else {
+                    completionHandler(nil)
+                }
+            }
         }
     }
 }

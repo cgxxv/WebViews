@@ -16,11 +16,15 @@ struct ChatGPT: Codable, Hashable, Identifiable {
 enum ChatGPTsError: LocalizedError {
 //    case invalidUUID(String)
     case invalidURL(String)
+    case invalidFileFormat(String)
+    case decodingError(String)
 
     var errorDescription: String? {
         switch self {
 //        case .invalidUUID(let message): return message
         case .invalidURL(let message): return message
+        case .invalidFileFormat(let message): return message
+        case .decodingError(let message): return message
         }
     }
 }
